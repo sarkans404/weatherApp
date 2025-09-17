@@ -2,24 +2,25 @@
 export default {
   data() {
     return{
-      msg: 'Hello Vue 3 + TypeScript + Vite + TailwindCSS',
-      className: 'text-stone-500 font-mono text-lg ml-10 m-4',
-      clicks: 0
+      city: ''
     };
   },
   methods: {
-    counter() {
-      this.clicks++;
-    }
   }
 };
 </script>
 
 <template>
-  <h1 class="text-3xl text-stone-600 m-10 font-bold mb-0">Initial test</h1>
-  <p class="text-stone-500 font-semibold text-xl m-10 mt-0">Some description...</p>
-  <p v-bind:class="className">{{ msg != null ? msg : '' }}</p>
-  <button v-on:click="counter()" class="p-4 bg-gray-500 rounded-md m-10 cursor-pointer text-white">Clicked {{  clicks }}</button>
+  <main class="w-full h-screen flex justify-center items-center">
+    <div>
+      <div class="input-cont w-[55em] h-16 rounded-xl p-2 bg-[rgba(0,0,0,0.9)] border-2 border-stone-800 shadow-md shadow-black/50">
+          <input v-model.lazy="city" class="text-white w-full h-full outline-none transition-colors duration-300 focus:border-stone-800 border-2 border-transparent rounded-md" type="text" name="search" id="search" placeholder="Enter your city here...">
+      </div>
+      <div v-show="city" class="w-[55em] h-10 text-white mt-4 rounded-xl p-2 bg-[rgba(0,0,0,0.9)] border-2 border-stone-800 shadow-md shadow-black/50">
+        City: {{  city }}
+      </div>
+    </div>
+  </main>
 </template>
 
 <style scoped>
