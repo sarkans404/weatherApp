@@ -1,5 +1,129 @@
-# Vue 3 + TypeScript + Vite
+# Weather App 🌤️
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+A modern weather application built with Vue 3, TypeScript, and Vite. The application provides real-time weather information using the OpenWeatherMap API.
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+## 🌟 Features
+
+- ⚡ Fast and responsive interface
+- 🎨 Dark/Light theme
+- 📱 Responsive design
+- 🌡️ Detailed weather information
+- 🔄 Automatic data updates
+- 💻 Built with modern tech stack
+
+## 🛠️ Technologies
+
+- Vue 3
+- TypeScript
+- Vite
+- TailwindCSS
+- OpenWeatherMap API
+
+## 📋 Prerequisites
+
+Before installation, ensure you have:
+
+- Node.js (version 16.0.0 or higher)
+- npm or yarn
+- OpenWeatherMap API key
+
+## 🚀 Installation and Setup
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/your-username/weatherApp.git
+   cd weatherApp
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+3. Configure environment variables:
+
+   - Copy `.env.exemple` file and rename it to `.env`
+   - Open the `.env` file
+   - Replace `enter_your_api_key_here` with your OpenWeatherMap API key
+
+   ```bash
+   cp .env.exemple .env
+   ```
+
+4. Run the development server:
+
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+5. Open your browser and navigate to: `http://localhost:5173`
+
+## 🏗️ Production Build
+
+To create an optimized production build:
+
+```bash
+npm run build
+# or
+yarn build
+```
+
+The build output will be in the `dist` directory.
+
+## 📝 How to Get OpenWeatherMap API Key
+
+1. Go to [OpenWeatherMap](https://openweathermap.org/)
+2. Sign up or log in to your account
+3. Navigate to the "API keys" section
+4. Create a new key or use an existing one
+5. Copy the key to your `.env` file
+
+## 🔧 Configuration
+
+- `vite.config.ts` - Build configuration
+- `tsconfig.json` - TypeScript configuration
+- `.env` - Environment variables
+
+## 📦 Project Structure
+
+```
+weatherApp/
+├── public/           # Static files
+├── src/
+│   ├── assets/      # Images and icons
+│   ├── components/  # Vue components
+│   ├── services/    # API services
+│   ├── App.vue      # Root component
+│   └── main.ts      # Entry point
+├── .env             # Environment variables
+└── package.json     # Dependencies and scripts
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please:
+
+1. Fork the repository
+2. Create a branch for your changes
+3. Make your changes
+4. Submit a Pull Request
+
+## 📜 License
+
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+## 👥 Authors
+
+- Your Name - [GitHub](https://github.com/your-username)
+
+## 🙏 Acknowledgments
+
+- [OpenWeatherMap](https://openweathermap.org/) for providing the API
+- [Vue.js](https://vuejs.org/) for the excellent framework
+- [Vite](https://vitejs.dev/) for the blazing fast build tool
