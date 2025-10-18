@@ -32,7 +32,7 @@ Before installation, ensure you have:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/weatherApp.git
+   git clone https://github.com/sarkans404/weatherApp.git
    cd weatherApp
    ```
 
@@ -46,12 +46,12 @@ Before installation, ensure you have:
 
 3. Configure environment variables:
 
-   - Copy `.env.exemple` file and rename it to `.env`
+   - Copy `.env.example` file and rename it to `.env`
    - Open the `.env` file
    - Replace `enter_your_api_key_here` with your OpenWeatherMap API key
 
    ```bash
-   cp .env.exemple .env
+   cp .env.example .env
    ```
 
 4. Run the development server:
@@ -83,6 +83,8 @@ The build output will be in the `dist` directory.
 3. Navigate to the "API keys" section
 4. Create a new key or use an existing one
 5. Copy the key to your `.env` file
+
+> Note: Make sure to rename `.env.exemple` to `.env` and insert your API key there.
 
 ## 🔧 Configuration
 
@@ -118,12 +120,10 @@ Contributions are welcome! Please:
 
 This project is licensed under the MIT License. See the LICENSE file for details.
 
-## 👥 Authors
-
-- Your Name - [GitHub](https://github.com/your-username)
-
 ## 🙏 Acknowledgments
 
 - [OpenWeatherMap](https://openweathermap.org/) for providing the API
 - [Vue.js](https://vuejs.org/) for the excellent framework
 - [Vite](https://vitejs.dev/) for the blazing fast build tool
+
+Personal first-time project experience using Git and GitHub
