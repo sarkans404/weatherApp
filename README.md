@@ -96,7 +96,6 @@ The build output will be in the `dist` directory.
 
 ```
 weatherApp/
-├── public/           # Static files
 ├── src/
 │   ├── assets/      # Images and icons
 │   ├── components/  # Vue components
@@ -106,15 +105,6 @@ weatherApp/
 ├── .env             # Environment variables
 └── package.json     # Dependencies and scripts
 ```
-
-## 🤝 Contributing
-
-Contributions are welcome! Please:
-
-1. Fork the repository
-2. Create a branch for your changes
-3. Make your changes
-4. Submit a Pull Request
 
 ## 📜 License
 
