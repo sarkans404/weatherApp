@@ -1,10 +1,9 @@
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useWeather } from './components/useWeather'
 import { getWeatherIcon } from './components/icons'
 import { useTheme } from './components/useTheme'
 
-// local state
 const cityInput = ref()
 const settingTab = ref(false)
 const units = ref<'metric' | 'imperial' | 'standard'>('metric')
@@ -75,7 +74,7 @@ function getDayOfWeek(n: number): string{
   const date = new Date()
   date.setDate(date.getDate() + n)
 
-  return date.toLocaleDateString('en-US', {weekday: 'long'}) === (new Date().toLocaleString([], {weekday: 'long'}))? 'Today' : date.toLocaleDateString('en-US', {weekday: 'long'})
+  return date.toLocaleDateString([], {weekday: 'long'}) === (new Date().toLocaleString([], {weekday: 'long'}))? 'Today' : date.toLocaleDateString('en-US', {weekday: 'long'})
 }
 
 const dailyForecast = computed(() => {
@@ -96,43 +95,76 @@ const gearColor = computed(() => {
   return 'src/assets/gearBlack.svg'
 })
 
+onMounted(() => {
+  const prefs = localStorage.getItem('weatherapp:prefs')
+  if (prefs) {
+    try {
+      const parsed = JSON.parse(prefs)
+      if (parsed.units) {
+        units.value = parsed.units
+      }
+    } catch (e) {
+      console.warn('Error reading prefs:', e)
+    }
+  }
+})
+
+watch(units, (newVal) => {
+  const prefs = localStorage.getItem('weatherapp:prefs')
+  let parsed = {}
+  try {
+    parsed = prefs ? JSON.parse(prefs) : {}
+  } catch {
+    parsed = {}
+  }
+  parsed = { ...parsed, units: newVal }
+  localStorage.setItem('weatherapp:prefs', JSON.stringify(parsed))
+})
 </script>
 
 <template>
   <main class="w-full min-h-screen flex justify-center items-center">
-    <div>
+    <div class="w-full lg:px-4 md:px-6 max-w-[55em] mx-auto">
       <!-- <span class="absolute top-1 bg-neutral-900 p-2 text-sm rounded text-white font-medium">Loading: {{ loading }}</span> -->
-      <div class="input-cont flex w-[55em] ">
-          <input v-model.lazy="cityInput" @keyup.enter="onSearch" class="text-white white w-[92%] pl-4 h-16 rounded-2xl p-2 border-2 border-stone-800 shadow-md shadow-black/50 outline-none transition-colors duration-300 focus:border-stone-800 background-c" type="text" name="search" id="search" placeholder="Enter your city here...">
-          <div @click="toggleSettings" class="background-c ml-2 w-[64px] h-full rounded-2xl transition-colors cursor-pointer duration-300 flex justify-center items-center shadow-md shadow-black/50">
-            <img :src="gearColor" alt="Settings" class="h-16 w-full p-1.5">
+      <div class="input-cont flex w-full">
+          <input v-model.lazy="cityInput" @keyup.enter="onSearch" class="text-white white w-full pl-4 h-16 rounded-2xl p-2 border-2 border-stone-800 shadow-md shadow-black/50 outline-none transition-colors duration-300 focus:border-stone-800 background-c" type="text" name="search" id="search" placeholder="Enter your city here...">
+          <div @click="toggleSettings" class="background-c ml-2 w-[4em] h-[4em] rounded-2xl transition-colors cursor-pointer duration-300 flex justify-center items-center shadow-md shadow-black/50">
+            <img :src="gearColor" alt="Settings" class="h-full w-full p-1.5">
           </div>
       </div>
-      <div v-show="loading && !settingTab" class="background-c error w-[55em] text-white text-center mt-2 white rounded-xl p-6 py-20 bg-[rgba(0,0,0,0.9)] border-2 border-stone-800 shadow-md shadow-black/50">
+      <div v-show="loading && !settingTab" class="background-c error w-full max-w-[55em] text-white text-center mt-2 white rounded-xl p-6 py-20 bg-[rgba(0,0,0,0.9)] border-2 border-stone-800 shadow-md shadow-black/50">
           <h2 class="text-white font-bold text-4xl tracking-wider">Loading...</h2>
       </div>
-      <div v-show="!current?.cityName && !settingTab && cityInput && !loading" class="background-c white error w-[55em] text-white text-center mt-2 rounded-xl p-6 py-20 bg-[rgba(0,0,0,0.9)] border-2 border-stone-800 shadow-md shadow-black/50">
+      <div v-show="!current?.cityName && !settingTab && cityInput && !loading" class="background-c white error max-w-[55em] w-full text-white text-center mt-2 rounded-xl p-6 py-20 bg-[rgba(0,0,0,0.9)] border-2 border-stone-800 shadow-md shadow-black/50">
           <h2 class="text-white font-bold text-4xl tracking-wider">City not found!</h2>
           <span class="text-sm font-medium tracking-wide textH">{{'('+ error + ')' }}</span>
       </div>
-      <div v-show="current?.cityName && !settingTab && cityInput && !loading" class="w-[55em] white background-c text-white mt-2 rounded-3xl p-3 bg-[rgba(0,0,0,0.9)] border-2 border-stone-800 shadow-md shadow-black/50">
+      <div v-show="current?.cityName && !settingTab && cityInput && !loading" class="max-w-[55em] w-full white background-c text-white mt-2 rounded-3xl p-3 bg-[rgba(0,0,0,0.9)] border-2 border-stone-800 shadow-md shadow-black/50">
         <div class="background-g background-c4 p-3 py-5 rounded-2xl border border-[#454d46]">
-          <div class="flex gap-2 items-center">
-            <div class="w-1/4 h-full  bg-cover">
+          <div class="mainInfoCont flex gap-2 items-center">
+            <div class="w-1/4 h-full bg-cover imgHidden2">
               <img :src="getWeatherIcon(current?.list[0].weather[0].description || 'error')" alt="someIMG" class="w-full h-full object-contain white">
             </div>
-            <div class="my-5 relative w-full"> 
-              <span class="day text-xl font-semibold tracking-wider">
-                {{ currentDate }}
-              </span>
-              <br>
-              <span class="capitalize text-xl font-medium absolute right-4 top-9">{{current?.list[0].weather[0].description}}</span>
-              <span class="location text-lg tracking-wide">{{ current?.cityName }}</span>
-              <br>
-              <span class="font-semibold text-4xl absolute right-4 top-0">{{current?.list[0].main.temp}} {{ current?.list[0].main.temp? tempUnitLabel : " " }}</span>
+            <div class="todayForecast my-5 relative w-full"> 
+              <div class="flex gap-2">
+                <div class="w-1/4 h-full bg-cover imgHidden hidden">
+                <img :src="getWeatherIcon(current?.list[0].weather[0].description || 'error')" alt="someIMG" class="w-full h-full object-contain white">
+              </div>
+                <div>
+                  <span class="day text-xl font-semibold tracking-wider">
+                  {{ currentDate }}
+                  </span>
+                  <br>
+                  <span class="location text-lg tracking-wide">{{ current?.cityName }}</span>
+                </div>
+              </div>
+              <div class="descInfo absolute right-4 top-0 flex flex-col text-right">
+                <span class="font-semibold text-4xl">{{current?.list[0].main.temp}} {{ current?.list[0].main.temp? tempUnitLabel : " " }}</span>
+                <span class="capitalize text-xl font-medium">{{current?.list[0].weather[0].description}}</span>
+              </div>
             </div>
           </div>
-          <div class="w-[90%]  bg-[rgba(0,0,0,0.8)] background-c5 flex justify-between p-3 rounded-2xl my-2 mx-auto text-sm">
+          <div class="timeCont w-[90%] bg-[rgba(0,0,0,0.8)] background-c5 flex justify-between p-3 rounded-2xl my-2 mx-auto text-sm">
             <div>
               Sunrise {{sunrise}}
             </div>
@@ -144,12 +176,12 @@ const gearColor = computed(() => {
             </div>
           </div>
         </div>
-        <div class="flex gap-2 my-1.5">
+        <div class="addInfo flex gap-2 my-1.5">
           <div class="py-1.5 px-3 border border-stone-800 rounded-2xl my-3 bg-zinc-900 background-c4">Pressure {{ pressureUnitLabel }}</div>
           <div class="py-1.5 px-3 border border-stone-800 rounded-2xl  my-3 bg-zinc-900 background-c4">Humidity {{current?.list[0].main.humidity ?? '-'}} %</div>
           <div class="py-1.5 px-3 border border-stone-800 rounded-2xl my-3 ml-auto bg-zinc-900 background-c4">Wind {{ current?.list[0].wind?.speed ?? '-' }} {{ windUnitLabel }}</div>
         </div>
-        <div class="flex gap-2">
+        <div class="dailyForecastCont flex gap-2">
           <div v-for="(item, index) in dailyForecast" :key="index"
            class="flex flex-col items-center gap-2 p-2  rounded-xl w-full bg-[#232825] background-c4">
               <span class="day capitalize">{{ getDayOfWeek(index) }}</span>
@@ -160,7 +192,7 @@ const gearColor = computed(() => {
         </div>
       </div>
 
-      <div v-show="settingTab" class="w-[55em] background-c relative text-white mt-2 rounded-3xl p-8 bg-[rgba(0,0,0,0.9)] border-2 border-stone-800 shadow-md shadow-black/50">
+      <div v-show="settingTab" class="settingTab w-full max-w-[55em] background-c relative text-white mt-2 rounded-3xl p-8 bg-[rgba(0,0,0,0.9)] border-2 border-stone-800 shadow-md shadow-black/50">
         <h2 class="black font-bold text-3xl text-center mb-10 white">Settings</h2>
         
         <div>
