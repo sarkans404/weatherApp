@@ -2,6 +2,8 @@
 
 A modern weather application built with Vue 3, TypeScript, and Vite. The application provides real-time weather information using the OpenWeatherMap API.
 
+![Main Page](media/main.png)
+
 ## 🌟 Features
 
 - ⚡ Fast and responsive interface
@@ -45,7 +47,6 @@ Before installation, ensure you have:
    ```
 
 3. Configure environment variables:
-
    - Copy `.env.example` file and rename it to `.env`
    - Open the `.env` file
    - Replace `enter_your_api_key_here` with your OpenWeatherMap API key
